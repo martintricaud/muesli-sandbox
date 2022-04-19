@@ -1,12 +1,7 @@
 <script lang="ts">
     /* This is a quick test of Pts (https://ptsjs.org) with Svelte (https://svelte.dev) */
     import { onMount } from "svelte";
-    import { store } from "../lib/stores";
-    import { color_rgb_store } from "../lib/stores";
     import { CanvasSpace, Pt, Rectangle, Group, UIDragger, UIButton, UI, Line, Const, Curve, Num, Form} from "pts";
-
-
-    //const colorRGB2store = color_rgb_store;
 
     let container, space, form;
     onMount(() => {

@@ -20,6 +20,8 @@
     "vite": "^2.8.0"
   },
   "dependencies": {
+    "graphology": "^0.24.1",
+    "kefir": "^3.8.8",
     "nouislider": "^15.5.1",
     "pts": "^0.10.9"
   }

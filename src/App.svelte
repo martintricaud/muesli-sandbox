@@ -1,21 +1,19 @@
 <script lang="ts">
-  import logo from './assets/svelte.png'
-  import Counter from './lib/Counter.svelte'
-  import Canvas from './lib/Canvas.svelte'
-  import CanvasUI from './lib/CanvasUI.svelte'
+  import Counter from "./lib/Counter.svelte";
+  import Slider1 from "./lib/Slider1.svelte";
+  import Sandbox from "./lib/Sandbox.svelte";
   import { store } from "./lib/stores";
+  import Edges from "./lib/Edges.svelte";
 
-  let s = store.tracker
+  let s = store.tracker;
 </script>
 
 <main>
   <h1>Hello Typescript!</h1>
 
-  <CanvasUI/>
-  <Canvas/>
-  <div>{$s}</div>
-  <Counter/>
-
+  <Slider1 />
+  <Edges />
+  <div>{$s[0]}, {$s[1]}</div>
   <p>
     Visit <a href="https://svelte.dev">svelte.dev</a> to learn how to build Svelte
     apps.
@@ -27,22 +25,24 @@
   </p>
 </main>
 
+
 <style>
   :root {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-      Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+      Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   }
 
   main {
     text-align: center;
-    padding: 1em;
+    padding: 0;
     margin: 0 auto;
+    height:100vh;
   }
 
-  img {
+  /* img {
     height: 16rem;
     width: 16rem;
-  }
+  } */
 
   h1 {
     color: #ff3e00;
@@ -69,4 +69,13 @@
       max-width: none;
     }
   }
+
+  /* #ghostSpace{
+    position:fixed;
+    top:0;
+    z-index: -1000;
+    width:100vw;
+    height:100vh;
+    background-color: rgba(10,220,0,0.2);
+  } */
 </style>
