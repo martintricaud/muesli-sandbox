@@ -6,7 +6,11 @@
     //import {holdAndCount} from '../lib/stream-utils';
     import Kefir from 'kefir';
     let container;
-    let edgeAreas,edgeUIs = [],swatches, dummyRect, dummyUIs ;
+    let edgeAreas,
+        edgeUIs = [],
+        swatches,
+        dummyRect,
+        dummyUIs;
     let uiRegistry = new Map();
 
     onMount(() => {
@@ -18,7 +22,6 @@
         let form = space.getForm();
         let currBound = new Bound();
         swatches = ['indianred', 'steelblue', 'khaki', 'olivedrab'];
-        
 
         let edgeEnter = (ui) => {
             ui.state('color', swatches[ui.state('id')]);
@@ -29,20 +32,36 @@
             ui.state('color', 'aliceblue');
         };
 
+        let draggableEnter = (ui) => {
+            ui.state('color', 'black');
+        };
+        let draggableLeave = (ui) => {
+            ui.state('color', 'slategray');
+        };
+
         space.add({
             start: (bound, space) => {
-                // dummyRect = Polygon.rectangle([space.width/2, space.height/2], 100, 100);
-                // dummyUIs = [dummyRect].map((dr)=>{
-                //     let res
-                //     let dui = UIDragger.fromPolygon(dr,{color: 'slategray'},"");
-                //     res.push(dui);
-                //     dr.forEach(corner=>{
-                //         let cornerHandle = UIDragger.fromCircle(corner,{},"");
-                //         res.push(cornerHandle)
-                //     });
-                //     return res;
-                // });
+                dummyRect = Polygon.rectangle([space.width / 2, space.height / 2], 100, 100);
+                dummyUIs = [dummyRect].map((dr) => {
+                    let dui = UIDragger.fromPolygon(dr, { color: 'slategray' }, '');
+                    dui.on('enter', draggableEnter);
+                    dui.on('leave', draggableLeave);
+                    // uiRegistry.set('dragableEnter', Kefir.fromEvents(dui, 'enter'));
+                    // uiRegistry.set('dragableLeave', Kefir.fromEvents(dui, 'leave'));
+                    uiRegistry.set(
+                        'dragableDragged',
+                        Kefir.fromEvents(dui, 'down').flatMap((downEvent) => {
+                            return Kefir.fromEvents(window, 'mousemove')
+                            .map((moveEvent) => {
+                                return [moveEvent.offsetX - dui.state('offset').x,moveEvent.offsetY - dui.state('offset').y]
+                            })
+                            .takeUntilBy(Kefir.fromEvents(window, 'mouseup'));
+                        })
+                    );
+                    return dui;
+                });
 
+                uiRegistry.get('dragableDragged').onValue(val=>dummyUIs[0].group.moveTo(val));
                 // EDGE AREAS
                 edgeAreas = makeEdgeAreas(
                     Rectangle.corners(Rectangle.from([0, 0], [space.width, space.height]))
@@ -60,18 +79,18 @@
                         Kefir.fromEvents(eui, 'leave', (ui) => ui.id)
                     );
                     uiRegistry.set(
-                        "enteredSince_" + i,
-                        uiRegistry.get("enter_" + i).flatMap((e) => {
+                        'enteredSince_' + i,
+                        uiRegistry.get('enter_' + i).flatMap((e) => {
                             //starts a clock that ticks every 100ms and increments
-                            let counter = Kefir.interval(100, 1).scan((prev, next) => next + prev,0);
-                            return counter.takeUntilBy(
-                                uiRegistry.get("leave_" + i)
+                            let counter = Kefir.interval(100, 1).scan(
+                                (prev, next) => next + prev,
+                                0
                             );
+                            return counter.takeUntilBy(uiRegistry.get('leave_' + i));
                         })
                     );
                     return eui;
                 });
-                
                 uiRegistry.forEach((val, key) => {
                     val.log(key + ': ');
                 });
@@ -81,10 +100,14 @@
                     //at each frame, render the edge UI areas as polygons of corresponding colors
                     eui.render((g) => form.fillOnly(eui.state('color')).polygon(g));
                 });
+                dummyUIs.forEach(dui=>{
+                    dui.render(g=>form.fillOnly(dui.state('color')).polygon(g));
+                });
+
             },
             action: (type, px, py, event) => {
                 UI.track(edgeUIs, type, new Pt(px, py), event);
-                //UI.track(dummyUIs, type, new Pt(px, py), event);
+                UI.track(dummyUIs, type, new Pt(px, py), event);
             },
 
             resize: (bound, evt) => {
