@@ -4,33 +4,28 @@ import Graph from 'graphology';
 
 class Store {
     constructor(
-        public color1: Writable<string> = writable('#52g'),
-        public color2: Writable<string> = writable('#34a'),
-        public colorRGB: Writable<Array<number>> = writable([24,43,10]),
+        public edgeHighlight: Writable<string> = writable('aliceblue'),
+        public background: Writable<string> = writable('cornsilk'),   
         public tracker: Writable<Array<number>> = writable([0,0]),
-        public tracker2: Writable<Array<number>> = writable([0,0])
     ) { }
 
+    get backgroundValue(){
+        return this.background;
+    }
     // get trackerValue(){
     //     return 
     // }
-    // get fullname() {
-    //     // Use derived to access writable values and export as readonly
-    //     return derived(
-    //         [this.color, this.lastname],
-    //         ([$color, $lastName]) => {
-    //             return $color + " " + $lastName
-    //         }
-    //     )
+
     // }
 }
 
 
-type ColorSwatch = Array<number> & { 
-    name: string
-}
+type ColorSwatch = {
+    name: string;
+    value: string;
+};
 
-class colorSwatchesStore{
+class ColorSwatchesStore{
     constructor(
         public swatches: Writable<Array<ColorSwatch>> = writable()
     ){}
@@ -55,3 +50,4 @@ class colorRGBStore {
 // Export a singleton
 export const store = new Store();
 export const color_rgb_store = new colorRGBStore();
+export const colorSwatchesStore = new ColorSwatchesStore()

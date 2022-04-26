@@ -35,7 +35,3 @@ export function makeEdgeAreas(boundary:Group){
         .map(el=>Group.fromArray(Util.flatten(el))) //[[A,B,B1,A1],[B,C,C1,B1],[C,D,D1,C1],[D,A,A1,D1]]
     return quads;
 }
-
-
-// fromPolygon ( group, states, id )
-// A static helper function to create a Polygon UI.

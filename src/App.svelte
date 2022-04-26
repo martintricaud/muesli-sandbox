@@ -1,19 +1,17 @@
 <script lang="ts">
-  import Counter from "./lib/Counter.svelte";
   import Slider1 from "./lib/Slider1.svelte";
-  import Sandbox from "./lib/Sandbox.svelte";
-  import { store } from "./lib/stores";
+  //import { store } from "./lib/stores";
   import Edges from "./lib/Edges.svelte";
+  import EventStreams from "./lib/EventStreams.svelte";
 
-  let s = store.tracker;
+  //let s = store.tracker;
 </script>
 
 <main>
-  <h1>Hello Typescript!</h1>
-
   <Slider1 />
   <Edges />
-  <div>{$s[0]}, {$s[1]}</div>
+  <!-- <EventStreams /> -->
+  <!-- <div>{$s[0]}, {$s[1]}</div> -->
   <p>
     Visit <a href="https://svelte.dev">svelte.dev</a> to learn how to build Svelte
     apps.
@@ -70,12 +68,5 @@
     }
   }
 
-  /* #ghostSpace{
-    position:fixed;
-    top:0;
-    z-index: -1000;
-    width:100vw;
-    height:100vh;
-    background-color: rgba(10,220,0,0.2);
-  } */
+ 
 </style>
