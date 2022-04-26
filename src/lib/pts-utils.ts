@@ -7,23 +7,6 @@ import {Util, CanvasSpace, Pt, Rectangle, Group, Curve, UIDragger, UI, Line, UIB
 
 //-- Every object in a 1D space is generated from a number between zero and 1 
 
-export function edgeAreasUIs(boundary:Group){
-    //
-    let inner = boundary.scale(0.8, Bound.fromGroup(boundary).center).segments(2,1,true);
-    let outer = boundary.segments(2,1,true);
-    let c = Util.combine(outer,inner,(g1,g2)=>{
-        // let a = g1.concat(g2.reverse());
-        return Group.fromPtArray(g1.concat(g2.reverse()));
-    });
-
-    let edges = c.map(edgeArea=>UI.fromPolygon(edgeArea,{},""));
-    return edges;
-}
-
-export function padding(shape:Group){
-    return shape.scale(0.8, Bound.fromGroup(shape).center);
-}
-
 export function makeEdgeAreas(boundary:Group){
     //get the segments of the outer boundary.
     let outer = boundary.segments(2,1,true); //the segments are [A,B],[B,C],[C,D],[D,A]
@@ -34,4 +17,36 @@ export function makeEdgeAreas(boundary:Group){
     let quads = Util.zip([outer,inner]) //[[A,B],[B1,A1]],[[B,C],[C1,B1]],[[C,D],[D1,C1]],[[D,A],[A1,D1]]
         .map(el=>Group.fromArray(Util.flatten(el))) //[[A,B,B1,A1],[B,C,C1,B1],[C,D,D1,C1],[D,A,A1,D1]]
     return quads;
+}
+
+// export function edgeAreasUIs(boundary:Group){
+//     let inner = boundary.scale(0.8, Bound.fromGroup(boundary).center).segments(2,1,true);
+//     let outer = boundary.segments(2,1,true);
+//     let c = Util.combine(outer,inner,(g1,g2)=>{
+//         return Group.fromPtArray(g1.concat(g2.reverse()));
+//     });
+//     let edgeUIs = c.map(edgeArea=>UI.fromPolygon(edgeArea,{},""));
+//     return edgeUIs;
+// }
+
+export function padding(shape:Group){
+    return shape.scale(0.8, Bound.fromGroup(shape).center);
+}
+
+
+
+export function resizeable(boundary:Group){
+    
+
+}
+
+//RESIZE STREAM
+//takes in a stream of vectors (pointer stuff) and an anchor point, returns a stream of functions Group->Group
+
+//Stream that holds the value of a one time event (triggered on "startConditionStream") until an endConditionStream has been triggered, and counts how much time has elapsed
+export const resizeStream = function(pointerStream,anchorStream){
+    let returnFn;
+    returnFn = function(geomElem){
+        return 
+    }
 }

@@ -20,6 +20,7 @@ export const hold = function(startConditionStream,endConditionStream,transform){
     })
 }
 
+//Stream that holds the value of a one time event (triggered on "startConditionStream") until an endConditionStream has been triggered, and counts how much time has elapsed
 export const holdAndCountDate = function(startConditionStream,endConditionStream){
     return startConditionStream.flatMap(
         (e) => {
@@ -32,21 +33,8 @@ export const holdAndCountDate = function(startConditionStream,endConditionStream
         }
     )
 }
-let mouseInsideSinceStream = mouseEnterStream.flatMap(
-    (e) => {
-        let start: Date = new Date();
-        let counter = Kefir.fromPoll(100, function () {
-            let a: Date = new Date();
-            return [a.getTime() - start.getTime(), e];
-        });
-        return counter.takeUntilBy(mouseLeaveStream);
-    }
-);
 
 
-let mouseInsideStream = mouseEnterStream.flatMap((e) => {
-    return Kefir.interval(100, e).takeUntilBy(mouseLeaveStream);
-});
 
 
 let mouseDragStream = Kefir.fromEvents(mouseDownStream).flatMap((md) => {
